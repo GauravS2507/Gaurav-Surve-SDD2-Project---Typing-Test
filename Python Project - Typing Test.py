@@ -10,22 +10,27 @@ import time
 from pathlib import Path
 
 
-#Place Holder Variables
-x= 0
 
 #Defining Commands
-def New_window():    #From Open Window --> Main Window
-    global x, frame1
+def create_typing():
+    global x, main_window
     #Clearing Frame
-    if x==0 :
-        x= 1
-        for widget in frame1.winfo_children(): #Emptying out frame 
-            widget.place_forget()
-            root.geometry("1400x700")
-            frame1 = ctk.CTkFrame(root, width=1300, height=600)
-            frame1.pack(expand = True, fill = "both")
-            frame3 = ctk.CTkFrame(frame1, width = 1200, height = 200)
-            frame3.place(relx = 0.5, rely = 0.9, anchor = "s")
+    for widget in main_window.winfo_children(): #Emptying out frame 
+        widget.place_forget()
+    global container, typing_container, text_container
+    main_window.pack_forget()
+    root.geometry("1400x700")
+    container = ctk.CTkFrame(root, fg_color="red")
+    container.pack(expand=True, fill="both")
+    typing_container = ctk.CTkFrame(container, fg_color="green")
+    typing_container.place(relx=0.5, rely=0.5, relwidth=0.9, relheight=0.9, anchor="c")
+    text_container = ctk.CTkFrame(typing_container, fg_color="yellow")
+    text_container.place(relx=0.5, rely=0.05, relwidth=0.9, relheight=0.45, anchor="n")
+    settings_container = ctk.CTkFrame(typing_container, fg_color= "blue")
+    settings_container.place(relx = 0.05, rely = 0.95, anchor = "sw", relheight = 0.4 )
+    wpm_label = ctk.CTkLabel(typing_container, text = "WPM:")
+    wpm_label.place(in_ = typing_container, relx = 0.1)
+            
             
 
 def settings():     #Command for settings button
@@ -41,21 +46,21 @@ root = ctk.CTk()
 root.geometry("450x350")
 root.title("Touch Typing Helper - Gaurav Surve")
 
-#Frame1
-frame1 = ctk.CTkFrame(root,width=400, height=500, border_width = 10, border_color = "#13141F")
-frame1.pack(expand = True, fill = "both")
+#main_window
+main_window = ctk.CTkFrame(root,width=400, height=500, border_width = 10, border_color = "#13141F")
+main_window.pack(expand = True, fill = "both")
 # Labels Used
-Welcome_TTH = ctk.CTkLabel(frame1, text="Welcome to the Touch Type Helper", font=("Work Sans", 24), fg_color="#000435", corner_radius=100)
+Welcome_TTH = ctk.CTkLabel(main_window, text="Welcome to the Touch Type Helper", font=("Work Sans", 24), fg_color="#000435", corner_radius=100)
 Welcome_TTH.place(relx = 0.5, rely = 0.2, anchor = "c")
 
 # Buttons
-Begin_TTH = ctk.CTkButton(frame1, text="Begin", font=("Arial", 16), fg_color="#282E78", command = New_window)
+Begin_TTH = ctk.CTkButton(main_window, text="Begin", font=("Arial", 16), fg_color="#282E78", command = create_typing)
 Begin_TTH.place(relx = 0.5, rely = 0.4, anchor = "c")
 
-Settings = ctk.CTkButton(frame1, text="Settings⚙️", font=("Arial", 16), fg_color="#282E78", command = settings)
+Settings = ctk.CTkButton(main_window, text="Settings⚙️", font=("Arial", 16), fg_color="#282E78", command = settings)
 Settings.place(relx = 0.5, rely = 0.5, anchor = "c")
 
-Credits = ctk.CTkButton(frame1, text="Credits", font=("Arial", 16), fg_color="#282E78")
+Credits = ctk.CTkButton(main_window, text="Credits", font=("Arial", 16), fg_color="#282E78")
 Credits.place(relx = 0.5, rely = 0.6, anchor = "c")
 
 #Themes
