@@ -1,47 +1,13 @@
-import tkinter as tk
+username = input("Please Input your username: ")
+password = input("Please Input your password: ")
+print("Item list: Burger $10, Fries $2, Chicken $7")
+order = input("Please write what you want: ")
+Burger = 10
+Fries = 2
+Chicken = 7
+if order == "Burger":
+    quantity = input("How many")
+    more = input("Any thing else: ")
+    if more == "yes":
+        
 
-# Global variables to store current theme information
-current_theme = {
-    'bg_color': '#FFFFFF',
-    'fg_color': '#000000',
-    # Add more theme properties as needed
-}
-
-# Function to change the theme based on the theme ID
-def change_theme(theme_id):
-    global current_theme
-
-    if theme_id == 1:
-        current_theme = {'bg_color': '#FF5733', 'fg_color': '#FFFFFF'}
-    elif theme_id == 2:
-        current_theme = {'bg_color': '#3498db', 'fg_color': '#FFFFFF'}
-    # Add more theme options as needed
-
-    # Update the GUI elements with the new theme
-    update_theme()
-
-# Function to update GUI elements with the current theme
-def update_theme():
-    label.config(bg=current_theme['bg_color'], fg=current_theme['fg_color'])
-    # Update other GUI elements with the new theme properties
-
-# GUI setup
-root = tk.Tk()
-root.title("Theme Changer")
-
-# Create buttons to change the theme
-button_theme_1 = tk.Button(root, text="Theme 1", command=lambda: change_theme(1))
-button_theme_1.pack()
-
-button_theme_2 = tk.Button(root, text="Theme 2", command=lambda: change_theme(2))
-button_theme_2.pack()
-
-# Create a label to visualize the changes
-label = tk.Label(root, text="Welcome to Theme Changer!", padx=10, pady=10)
-label.pack()
-
-# Initialize the GUI with the default theme
-update_theme()
-
-# Start the Tkinter event loop
-root.mainloop()
