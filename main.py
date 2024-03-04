@@ -45,12 +45,9 @@ def create_typing():
     timer_label.place(relx=0.5, rely=0.7, anchor="c")
 
     current_text = ""
-    typing_box = ctk.CTkEntry(typing_container, placeholder_text=sampled_words[0])
+    typing_box = ctk.CTkEntry(typing_container, placeholder_text= "   Click Box To Begin")
     typing_box.bind("<KeyRelease>", on_key_press)
     typing_box.place(relx=0.5, rely=0.95, anchor="c")
-
-    click_box = ctk.CTkLabel(typing_container, text="Click Box to Start", font=ctk.CTkFont(size=24), corner_radius=100)
-    click_box.place(relx=0.5, rely=0.9, anchor="c")
 
     #Options for Length of Time the Test is for
     len_time = ctk.CTkOptionMenu(typing_container, values = ["10", "30", "60"], command = test_time)
@@ -62,29 +59,29 @@ def test_time(value):
    timer_seconds = int(value)
    
 
-
+#Function that commands the Go Back Button
 def go_back():
     container.pack_forget()  # Forget the current window
     root.geometry("1400x700")  # Adjust window size
     make_main_window()  # Have to remake content who knows why!!!
     place_main_window_content()
-
+#Function that commands when the first word is written right
 def on_key_press(e):
     global score
     current_text = typing_box.get()
     if current_text.strip() == sampled_words[0]:
         sampled_words.pop(0)
         update_current_word()
-        typing_box.configure(placeholder_text=" ".join(sampled_words[0:3]))
+        typing_box.configure(placeholder_text=" ".join(sampled_words[0:3]))#More than 1 word on the screen
         typing_box.delete(0, tk.END)
         score += 1
         update_timer()
 
-
+#Updated word as the word is spelt right
 def update_current_word():
     current_word_label.configure(text=" ".join(sampled_words[0:3]))
 
-
+#Receives word from JSON File "Words"
 def get_words():
     global sampled_words
     with open("words.json") as file:
@@ -92,7 +89,7 @@ def get_words():
         sampled_words = random.sample(words, 100)
         
 
-
+#Countdown Timer
 def update_timer():
     global timer_seconds, timer_update_id, score, Restart_button
     if timer_seconds > 0:
@@ -105,8 +102,6 @@ def update_timer():
         timer_update_id = root.after(1000, update_timer)
     else:
         timer_label.configure(text="Time's up!")
-        #wpm_label = ctk.CTkLabel(typing_container, text="WPM: ", corner_radius = 100, fg_color = "grey", text_color = "black")
-        #wpm_label.place(in_ = typing_container, relx=0.1, rely = 0.05)
         Restart_button = ctk.CTkButton(typing_container, text = "Restart", command = restart)
         Restart_button.place(relx=0.8, rely=0.95, anchor="c" )
         value = int(len_time.get())
@@ -119,12 +114,12 @@ def update_timer():
             wpm_label.configure(text = f"WPM: {score} ")
         typing_box.configure(state="disable")
         
-
+#Starts timer
 def start_timer(duration):
     global timer_seconds
     timer_seconds = duration
     update_timer()
-
+#Command that remakes the main window content after the Back Button is pressed
 def place_main_window_content():
     main_window.pack(expand=True, fill="both")
     dummy_widget.pack()
@@ -176,7 +171,7 @@ def make_main_window():
 
     #Themes
     ctk.set_default_color_theme("green")  # Themes: "blue" (standard), "green", "dark-blue"
-
+#Command for the restart button that occurs when time is up
 def restart():
     global score, timer_seconds, timer_choice, len_time
     score = 0
@@ -184,6 +179,7 @@ def restart():
     timer_label.configure(text=f"Time left: {timer_seconds} seconds")
     Restart_button.place_forget()
     typing_box.configure(state="normal")
+    
 
 #Placing Main Window content
 def place_main_window_content():
@@ -194,10 +190,7 @@ def place_main_window_content():
     Settings.place(relx = 0.5, rely = 0.5, anchor = "c")
     Credits.place(relx = 0.5, rely = 0.6, anchor = "c")
 
-# Note for you: 
-# - this is a good programming practice
-# - only run if you are directly executing the script
-# - doesn't run if you import the script into another script
+#Main variables for when program is started
 if __name__ == "__main__":
     global timer_choice
     get_words()
