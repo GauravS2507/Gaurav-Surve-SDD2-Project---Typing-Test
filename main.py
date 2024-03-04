@@ -25,7 +25,7 @@ def create_typing():
     container.pack(expand=True, fill="both")
     typing_container = ctk.CTkFrame(container)
     typing_container.place(relx=0.5, rely=0.5, relwidth=0.9, relheight=0.9, anchor="c")
-    main_image = PIL.Image.open("main_image.png")
+    main_image = PIL.Image.open("black_white_optical_illusion_swirl_hd_trippy-1920x1080.png")
     dummy_widget1 = ctk.CTkLabel(typing_container, text="", image=ctk.CTkImage(main_image, size=(1400, 700)))
     dummy_widget1.pack()
     text_container = ctk.CTkFrame(typing_container)
@@ -50,7 +50,7 @@ def create_typing():
     typing_box.place(relx=0.5, rely=0.95, anchor="c")
 
     #Options for Length of Time the Test is for
-    len_time = ctk.CTkOptionMenu(typing_container, values = ["10", "30", "60"], command = test_time)
+    len_time = ctk.CTkOptionMenu(typing_container, values = ["10", "30", "60"], command = test_time, button_color = "black", fg_color= "grey")
     len_time.place(relx = 0.8, rely = 0.5)
     len_time.configure(state="disable")
 def test_time(value):
@@ -157,7 +157,7 @@ def make_main_window():
     #main_window
     main_window = ctk.CTkFrame(root,width=400, height=500, border_width = 10) #border_color = "#13141F") )
     
-    dummy_widget = ctk.CTkLabel(main_window, text="", image=ctk.CTkImage(PIL.Image.open(Path(__file__).resolve().parents[0] / "polka.png"), size=(1400,700)))
+    dummy_widget = ctk.CTkLabel(main_window, text="", image=ctk.CTkImage(PIL.Image.open(Path(__file__).resolve().parents[0] / "Ball4-1400x700.png"), size=(1400,700)))
     
     # Labels Used
     Welcome_TTH = ctk.CTkLabel(main_window, text="Welcome to the Touch Type Helper", font=("Work Sans", 24), fg_color="#272626", corner_radius=100)
