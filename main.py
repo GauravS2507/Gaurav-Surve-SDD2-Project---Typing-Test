@@ -25,14 +25,16 @@ def create_typing():
     container.pack(expand=True, fill="both")
     typing_container = ctk.CTkFrame(container)
     typing_container.place(relx=0.5, rely=0.5, relwidth=0.9, relheight=0.9, anchor="c")
-    main_image = PIL.Image.open("black_white_optical_illusion_swirl_hd_trippy-1920x1080.png")
+    main_image = PIL.Image.open("main_image.png")
     dummy_widget1 = ctk.CTkLabel(typing_container, text="", image=ctk.CTkImage(main_image, size=(1400, 700)))
     dummy_widget1.pack()
-    text_container = ctk.CTkFrame(typing_container)
+    text_container = ctk.CTkFrame(typing_container, border_width= 5, border_color= "#767272")
     text_container.place(relx=0.5, rely=0.05, relwidth=0.9, relheight=0.45, anchor="n")
-
+    settings_container = ctk.CTkFrame(typing_container, border_width= 5, border_color= "#767272")
+    settings_container.place(relx = 0.87, rely = 0.7, anchor = "c")
+    #Label for the WPM counter
     wpm_label = ctk.CTkLabel(typing_container, text="WPM: ", corner_radius = 100, fg_color = "grey", text_color = "black")
-    wpm_label.place(in_=typing_container, relx=0.1, rely = 0.05)
+    wpm_label.place(in_=typing_container, relx=0.1, rely = 0.07)
 
     Back = ctk.CTkButton(container, text="← Go Back", command=go_back, corner_radius = 100, fg_color= "white", text_color= "black")
     Back.place(relx=0.1)
@@ -45,14 +47,16 @@ def create_typing():
     timer_label.place(relx=0.5, rely=0.7, anchor="c")
 
     current_text = ""
-    typing_box = ctk.CTkEntry(typing_container, placeholder_text= "   Click Box To Begin")
+    typing_box = ctk.CTkEntry(typing_container, placeholder_text= "   Click Box To Begin", font=ctk.CTkFont(size=20))
     typing_box.bind("<KeyRelease>", on_key_press)
-    typing_box.place(relx=0.5, rely=0.95, anchor="c")
+    typing_box.place(relx=0.5, rely=0.91, anchor="c", relheigh = 0.1, relwidth = 0.3)
 
     #Options for Length of Time the Test is for
-    len_time = ctk.CTkOptionMenu(typing_container, values = ["10", "30", "60"], command = test_time, button_color = "black", fg_color= "grey")
-    len_time.place(relx = 0.8, rely = 0.5)
+    len_time = ctk.CTkOptionMenu(settings_container, values = ["10", "30", "60"], command = test_time, button_color = "black", fg_color= "grey")
+    len_time.place(relx = 0.15, rely = 0.2)
     len_time.configure(state="disable")
+    len_time_label = ctk.CTkLabel(settings_container, text = "Seconds", corner_radius = 100, fg_color = "grey", text_color = "black")
+    len_time_label.place(relx = 0.3, rely = 0.05)
 def test_time(value):
    global timer_seconds
    timer_label.configure(text=f"Time left: {str(value)} seconds")
@@ -157,7 +161,7 @@ def make_main_window():
     #main_window
     main_window = ctk.CTkFrame(root,width=400, height=500, border_width = 10) #border_color = "#13141F") )
     
-    dummy_widget = ctk.CTkLabel(main_window, text="", image=ctk.CTkImage(PIL.Image.open(Path(__file__).resolve().parents[0] / "Ball4-1400x700.png"), size=(1400,700)))
+    dummy_widget = ctk.CTkLabel(main_window, text="", image=ctk.CTkImage(PIL.Image.open(Path(__file__).resolve().parents[0] / "polka.png"), size=(1400,700)))
     
     # Labels Used
     Welcome_TTH = ctk.CTkLabel(main_window, text="Welcome to the Touch Type Helper", font=("Work Sans", 24), fg_color="#272626", corner_radius=100)
@@ -180,7 +184,6 @@ def restart():
     Restart_button.place_forget()
     typing_box.configure(state="normal")
     
-
 #Placing Main Window content
 def place_main_window_content():
     main_window.pack(expand = True, fill = "both")
@@ -201,7 +204,6 @@ if __name__ == "__main__":
     root.geometry("1400x700")
     root.title("Touch Typing Helper - Gaurav Surve")
     
-
     make_main_window()
     place_main_window_content()
     root.mainloop()
