@@ -25,7 +25,7 @@ def create_typing():
     container.pack(expand=True, fill="both")
     typing_container = ctk.CTkFrame(container)
     typing_container.place(relx=0.5, rely=0.5, relwidth=0.9, relheight=0.9, anchor="c")
-    main_image = PIL.Image.open("main_image.png")
+    main_image = PIL.Image.open("Assets\main_image.png")
     dummy_widget1 = ctk.CTkLabel(typing_container, text="", image=ctk.CTkImage(main_image, size=(1400, 700)))
     dummy_widget1.pack()
     text_container = ctk.CTkFrame(typing_container, border_width= 5, border_color= "#767272")
@@ -57,11 +57,18 @@ def create_typing():
     len_time.configure(state="disable")
     len_time_label = ctk.CTkLabel(settings_container, text = "Seconds", corner_radius = 100, fg_color = "grey", text_color = "black")
     len_time_label.place(relx = 0.3, rely = 0.05)
+
+    modes = ctk.CTkOptionMenu(settings_container, values = ["dark", "light", "system"], command= ctk.set_appearance_mode, button_color = "black", fg_color= "grey")
+    modes.place(relx = 0.15, rely = 0.55)
+    modes_label = ctk.CTkLabel(settings_container, text = "Modes", corner_radius = 100, fg_color = "grey", text_color = "black")
+    modes_label.place(relx = 0.3, rely = 0.4)
+    
 def test_time(value):
    global timer_seconds
    timer_label.configure(text=f"Time left: {str(value)} seconds")
    timer_seconds = int(value)
-   
+
+
 
 #Function that commands the Go Back Button
 def go_back():
@@ -135,7 +142,7 @@ def place_main_window_content():
 
 #Credits Function
 def credits():
-    tk.messagebox.showinfo("Credits", "Made by Gaurav 12SDD2")
+    tk.messagebox.showinfo("Credits", "Made by Gaurav 12SDD2\nThis took a long time, im quite proud of my ability, and honestly if this doesnt get 100 it wasnt worth it. so pls 100. Shoutout to tomas vana for helping with the jsons")
 
 #Command for settings button
 def open_settings():     
@@ -150,7 +157,7 @@ def open_settings():
     frame2 = ctk.CTkFrame(settings_window, width = 450, height = 250) #Settings Pop-up window frame
     frame2.place(relx = 0.5, rely = 0.5, anchor = ("c"))
     #Image for settings Background
-    settings_image = PIL.Image.open("settings_image.png")
+    settings_image = PIL.Image.open("Assets\settings_image.png")
     dummy_widget3 = ctk.CTkLabel(frame2, text = "", image =ctk.CTkImage(settings_image, size=(450, 250)))
     dummy_widget3.place()
 
@@ -161,7 +168,7 @@ def make_main_window():
     #main_window
     main_window = ctk.CTkFrame(root,width=400, height=500, border_width = 10) #border_color = "#13141F") )
     
-    dummy_widget = ctk.CTkLabel(main_window, text="", image=ctk.CTkImage(PIL.Image.open(Path(__file__).resolve().parents[0] / "polka.png"), size=(1400,700)))
+    dummy_widget = ctk.CTkLabel(main_window, text="", image=ctk.CTkImage(PIL.Image.open(Path(__file__).resolve().parents[0] / "Assets\polka.png"), size=(1400,700)))
     
     # Labels Used
     Welcome_TTH = ctk.CTkLabel(main_window, text="Welcome to the Touch Type Helper", font=("Work Sans", 24), fg_color="#272626", corner_radius=100)
@@ -181,8 +188,9 @@ def restart():
     score = 0
     timer_seconds = 10
     timer_label.configure(text=f"Time left: {timer_seconds} seconds")
-    Restart_button.place_forget()
     typing_box.configure(state="normal")
+    Restart_button.place_forget()
+    
     
 #Placing Main Window content
 def place_main_window_content():
