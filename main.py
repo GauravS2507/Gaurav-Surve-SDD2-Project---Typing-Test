@@ -8,6 +8,7 @@ import time
 from pathlib import Path
 import json
 import tkinter.messagebox
+import sys
 
 
 
@@ -32,8 +33,8 @@ def create_typing():
     dummy_widget1.pack()
     text_container = ctk.CTkFrame(typing_container, border_width= 5, border_color= "#767272")
     text_container.place(relx=0.5, rely=0.05, relwidth=0.9, relheight=0.45, anchor="n")
-    settings_container = ctk.CTkFrame(typing_container, border_width= 5, border_color= "#767272")
-    settings_container.place(relx = 0.87, rely = 0.7, anchor = "c")
+    settings_container = ctk.CTkFrame(typing_container, border_width= 5, border_color= "#767272", height = 280)
+    settings_container.place(relx = 0.87, rely = 0.75, anchor = "c")
     #Label for the WPM counter
     wpm_label = ctk.CTkLabel(typing_container, text="WPM: ", corner_radius = 100, fg_color = "grey", text_color = "black")
     wpm_label.place(in_=typing_container, relx=0.1, rely = 0.07)
@@ -64,13 +65,20 @@ def create_typing():
     modes.place(relx = 0.15, rely = 0.55)
     modes_label = ctk.CTkLabel(settings_container, text = "Modes", corner_radius = 100, fg_color = "grey", text_color = "black")
     modes_label.place(relx = 0.3, rely = 0.4)
+
+    scale = ctk.CTkOptionMenu(settings_container, values = ["0.5", "1.0", "1.5"], command = scaling,  button_color = "black", fg_color= "grey")
+    scale.place(relx = 0.15,rely=0.9)
+    scale_label = ctk.CTkLabel(settings_container, text = "UI Scale", corner_radius = 100, fg_color = "grey", text_color = "black")
+    scale_label.place(relx =0.3, rely = .75)
+    scale.set("1.0")
     
 def test_time(value):
    global timer_seconds
    timer_label.configure(text=f"Time left: {str(value)} seconds")
    timer_seconds = int(value)
 
-
+def scaling(value):
+    ctk.set_widget_scaling(float(value))
 
 #Function that commands the Go Back Button
 def go_back():
@@ -86,7 +94,7 @@ def on_key_press(e):
         sampled_words.pop(0)
         update_current_word()
         typing_box.configure(placeholder_text=" ".join(sampled_words[0:3]))#More than 1 word on the screen
-        typing_box.delete(0, tk.END)
+        typing_box.delete(0,ctk.END)
         score += 1
         update_timer()
 
@@ -115,7 +123,7 @@ def update_timer():
         timer_update_id = root.after(1000, update_timer)
     else:
         timer_label.configure(text="Time's up!")
-        Restart_button = ctk.CTkButton(typing_container, text = "Restart", command = restart)
+        Restart_button = ctk.CTkButton(typing_container, text = "Restart", command = restart, fg_color = "grey", text_color = "black")
         Restart_button.place(relx=0.8, rely=0.95, anchor="c" )
         value = int(len_time.get())
         if value == 10:
@@ -126,6 +134,8 @@ def update_timer():
         else:
             wpm_label.configure(text = f"WPM: {score} ")
         typing_box.configure(state="disable")
+
+
         
 #Starts timer
 def start_timer(duration):
@@ -144,7 +154,7 @@ def place_main_window_content():
 
 #Credits Function
 def credits():
-    tk.messagebox.showinfo("Credits", "Made by Gaurav 12SDD2\nThis took a long time, im quite proud of my ability, and honestly if this doesnt get 100 it wasnt worth it. so pls 100. Shoutout to tomas vana for helping with the jsons")
+    tk.messagebox.showinfo("Credits", "Made by Gaurav 12SDD2")
 
 #Command for settings button
 def open_settings():     
@@ -173,7 +183,7 @@ def make_main_window():
     dummy_widget = ctk.CTkLabel(main_window, text="", image=ctk.CTkImage(PIL.Image.open(Path(__file__).resolve().parents[0] / "Assets\polka.png"), size=(1400,700)))
     
     # Labels Used
-    Welcome_TTH = ctk.CTkLabel(main_window, text="Welcome to the Touch Type Helper", font=("Work Sans", 24), fg_color="#272626", corner_radius=100)
+    Welcome_TTH = ctk.CTkLabel(main_window, text="Welcome to the Touch Type Helper", font=("Work Sans", 24), fg_color="#272626", corner_radius=1)
 
     # Buttons
     Begin_TTH = ctk.CTkButton(main_window, text="Begin", font=("Arial", 16), fg_color="#272626", command = create_typing)
@@ -188,10 +198,12 @@ def make_main_window():
 def restart():
     global score, timer_seconds, timer_choice, len_time
     score = 0
-    timer_seconds = 10
+    timer_seconds = int(len_time.get())
     timer_label.configure(text=f"Time left: {timer_seconds} seconds")
     typing_box.configure(state="normal")
     Restart_button.place_forget()
+
+
     
     
 #Placing Main Window content
@@ -209,6 +221,7 @@ if __name__ == "__main__":
     get_words()
     timer_seconds = 10
     score = 0 #Keeps score on how many words are right
+    
     
     root = ctk.CTk()
     root.geometry("1400x700")
