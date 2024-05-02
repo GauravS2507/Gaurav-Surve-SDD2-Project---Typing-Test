@@ -56,26 +56,28 @@ def create_typing():
 
     #Options for Length of Time the Test is for
     len_time = ctk.CTkOptionMenu(settings_container, values = ["10", "30", "60"], command = test_time, button_color = "black", fg_color= "grey")
-    len_time.place(relx = 0.15, rely = 0.2)
+    len_time.grid(column = 0, row = 1, pady = 6, padx = 10)
     len_time.configure(state="disable")
     len_time_label = ctk.CTkLabel(settings_container, text = "Seconds", corner_radius = 100, fg_color = "grey", text_color = "black")
-    len_time_label.place(relx = 0.3, rely = 0.05)
+    len_time_label.grid(column = 0, row = 0, pady = 8, padx = 10)
 
     modes = ctk.CTkOptionMenu(settings_container, values = ["dark", "light", "system"], command= ctk.set_appearance_mode, button_color = "black", fg_color= "grey")
-    modes.place(relx = 0.15, rely = 0.55)
+    modes.grid(column = 0, row = 3, pady = 6, padx = 10)
     modes_label = ctk.CTkLabel(settings_container, text = "Modes", corner_radius = 100, fg_color = "grey", text_color = "black")
-    modes_label.place(relx = 0.3, rely = 0.4)
+    modes_label.grid(column = 0, row = 2, pady = 6, padx = 10)
 
-    scale = ctk.CTkOptionMenu(settings_container, values = ["0.5", "1.0", "1.5"], command = scaling,  button_color = "black", fg_color= "grey")
-    scale.place(relx = 0.15,rely=0.9)
+    scale = ctk.CTkOptionMenu(settings_container, values = ["0.75", "1.0", "1.25"], command = scaling,  button_color = "black", fg_color= "grey")
+    scale.grid(column = 0, row = 5, pady = 8, padx = 10)
     scale_label = ctk.CTkLabel(settings_container, text = "UI Scale", corner_radius = 100, fg_color = "grey", text_color = "black")
-    scale_label.place(relx =0.3, rely = .75)
+    scale_label.grid(column = 0, row = 4, pady = 6, padx = 10)
     scale.set("1.0")
+    
     
 def test_time(value):
    global timer_seconds
    timer_label.configure(text=f"Time left: {str(value)} seconds")
    timer_seconds = int(value)
+  
 
 def scaling(value):
     ctk.set_widget_scaling(float(value))
@@ -156,27 +158,13 @@ def place_main_window_content():
 def credits():
     tk.messagebox.showinfo("Credits", "Made by Gaurav 12SDD2")
 
-#Command for settings button
-def open_settings():     
-    settings_window = ctk.CTkToplevel(root)
-    settings_window.lift()
-    settings_window.focus_force()
-    settings_window.grab_set()
-    settings_window.grab_release()
-    settings_window.title("Settings - Touch Typing Helper - Gaurav Surve")
-    settings_window.geometry("500x300")
-    #Frame 2 Setting
-    frame2 = ctk.CTkFrame(settings_window, width = 450, height = 250) #Settings Pop-up window frame
-    frame2.place(relx = 0.5, rely = 0.5, anchor = ("c"))
-    #Image for settings Background
-    settings_image = PIL.Image.open("Assets\settings_image.png")
-    dummy_widget3 = ctk.CTkLabel(frame2, text = "", image =ctk.CTkImage(settings_image, size=(450, 250)))
-    dummy_widget3.place()
+ 
+    
 
 #Main Window Content - Frame Buttons labels etc
 def make_main_window():
     #Pop Up-Window - Begin Touch Type Helper
-    global main_window, Welcome_TTH, Begin_TTH, Settings, Credits, dummy_widget
+    global main_window, Welcome_TTH, Begin_TTH, Credits, dummy_widget,EndProgram
     #main_window
     main_window = ctk.CTkFrame(root,width=400, height=500, border_width = 10) #border_color = "#13141F") )
     
@@ -188,7 +176,7 @@ def make_main_window():
     # Buttons
     Begin_TTH = ctk.CTkButton(main_window, text="Begin", font=("Arial", 16), fg_color="#272626", command = create_typing)
 
-    Settings = ctk.CTkButton(main_window, text="Settings⚙️", font=("Arial", 16), fg_color="#272626", command = open_settings)
+    EndProgram = ctk.CTkButton(main_window, text="End Program", font=("Arial", 16), fg_color="#272626", command=root.destroy)
 
     Credits = ctk.CTkButton(main_window, text="Credits", font=("Arial", 16), fg_color="#272626", command = credits)
 
@@ -212,8 +200,8 @@ def place_main_window_content():
     dummy_widget.pack()
     Welcome_TTH.place(relx = 0.5, rely = 0.2, anchor = "c")
     Begin_TTH.place(relx = 0.5, rely = 0.4, anchor = "c")
-    Settings.place(relx = 0.5, rely = 0.5, anchor = "c")
-    Credits.place(relx = 0.5, rely = 0.6, anchor = "c")
+    EndProgram.place(relx = 0.5, rely = 0.6, anchor = "c")
+    Credits.place(relx = 0.5, rely = 0.5, anchor = "c")
 
 #Main variables for when program is started
 if __name__ == "__main__":
@@ -222,11 +210,13 @@ if __name__ == "__main__":
     timer_seconds = 10
     score = 0 #Keeps score on how many words are right
     
+
     
     root = ctk.CTk()
     root.geometry("1400x700")
     root.title("Touch Typing Helper - Gaurav Surve")
-    
+    #root.overrideredirect(True)
+    #root.geometry("{0}x{1}+0+0".format(root.winfo_screenwidth(), root.winfo_screenheight()))
     make_main_window()
     place_main_window_content()
     root.mainloop()
