@@ -9,11 +9,16 @@ from pathlib import Path
 import json
 import tkinter.messagebox
 import sys
+import pyttsx3
 
 
 
 # Initialize a variable to store the ID of the scheduled update
 timer_update_id = None
+#Text to Speech Requirement
+engine = pyttsx3.init()
+engine.say("Gaurav's typing test")
+engine.runAndWait()
 
 # Defining Commands - Making Main Frame, All Widgets in 2nd Window
 def create_typing():
@@ -126,7 +131,7 @@ def update_timer():
     else:
         timer_label.configure(text="Time's up!")
         Restart_button = ctk.CTkButton(typing_container, text = "Restart", command = restart, fg_color = "grey", text_color = "black")
-        Restart_button.place(relx=0.8, rely=0.95, anchor="c" )
+        Restart_button.place(relx=0.5, rely=0.80, anchor="c" )
         value = int(len_time.get())
         if value == 10:
             wpm_label.configure(text = f"WPM: {score * 6} ")  
@@ -189,7 +194,8 @@ def restart():
     timer_seconds = int(len_time.get())
     timer_label.configure(text=f"Time left: {timer_seconds} seconds")
     typing_box.configure(state="normal")
-    Restart_button.place_forget()
+    Restart_button.destroy()
+    
 
 
     
