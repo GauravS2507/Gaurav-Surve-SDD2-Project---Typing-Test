@@ -13,7 +13,7 @@ timer_update_id = None
 
 # Defining Commands - Making Main Frame, All Widgets in 2nd Window, Each widget placed here will be represened in the main window
 def create_typing():
-    global current_word_label, container, typing_container, text_container, current_text, typing_box, container, timer_label, test_time, len_time, wpm_label, Textspeech, check_var
+    global current_word_label, container, typing_container, text_container, current_text, typing_box, container, timer_label, test_time, len_time, wpm_label, Textspeech, check_var, Back
     # Clearing Frame
     for widget in main_window.winfo_children():  # Emptying out frame
         widget.place_forget()
@@ -55,7 +55,7 @@ def create_typing():
 
     Back = ctk.CTkButton(
         container,
-        text="← Go Back",
+        text="← Go Back (Esc)",
         command=go_back,
         corner_radius=100,
         fg_color="white",
@@ -213,7 +213,7 @@ def update_timer():
         timer_label.configure(text="Time's up!")
         Restart_button = ctk.CTkButton(
             typing_container,
-            text="Restart",
+            text="Restart (Enter)",
             command=restart,
             fg_color="grey",
             text_color="black",
@@ -230,9 +230,8 @@ def update_timer():
         typing_box.configure(state="disable")
 
 
-def keybind_handler(event):
-    print(event.char)
-    print(event.modifiers)
+def invoke_begin():
+    Begin_TTH.invoke()
 
 
 # Starts timer
@@ -289,7 +288,7 @@ def make_main_window():
     # Buttons
     Begin_TTH = ctk.CTkButton(
         main_window,
-        text="Begin",
+        text="Begin (⇧ + ↵)",
         font=("Arial", 16),
         fg_color="#272626",
         command=create_typing,
@@ -317,6 +316,13 @@ def make_main_window():
     )  # Themes: "blue" (standard), "green", "dark-blue"
 
 
+def keybind(e, button):
+    try: 
+        button.invoke()
+    except NameError:
+        pass
+
+
 # Command for the restart button that occurs when time is up
 def restart():
     global score, timer_seconds, timer_choice, len_time
@@ -341,5 +347,8 @@ if __name__ == "__main__":
     # root.geometry("{0}x{1}+0+0".format(root.winfo_screenwidth(), root.winfo_screenheight()))
     make_main_window()
     place_main_window_content()
-    root.bind_all("<KeyPress>", keybind_handler)
+    root.bind("<Shift-Return>", lambda e: keybind(e, Begin_TTH))
+    root.bind("<Return>", lambda e: keybind(e, Restart_button))
+    root.bind("<Escape>", lambda e: keybind(e, Back))
+    typing_box.invoke()
     root.mainloop()
