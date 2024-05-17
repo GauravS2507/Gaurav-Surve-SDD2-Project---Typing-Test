@@ -8,3 +8,9 @@ INSTRUCTIONS:
 - Press Begin to go to main window.
 - Press box at the bottom of the window to start typing.
 - Select from 10, 30, and 60 seconds to decide what time you want to choose.
+
+KEYBINDS:
+- Open Program: SHIFT + ENTER 
+- Close Program: SHIFT + ESCAPE
+- Go Back: ESCAPE
+- Restart: ENTER

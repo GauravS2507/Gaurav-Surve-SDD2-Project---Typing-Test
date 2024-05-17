@@ -10,146 +10,162 @@ import json
 # Initialize a variable to store the ID of the scheduled update
 timer_update_id = None
 
+#Boolean Variables
+BeginBoolean = False
+BackBoolean = False
 
 # Defining Commands - Making Main Frame, All Widgets in 2nd Window, Each widget placed here will be represened in the main window
-def create_typing():
-    global current_word_label, container, typing_container, text_container, current_text, typing_box, container, timer_label, test_time, len_time, wpm_label, Textspeech, check_var, Back
-    # Clearing Frame
-    for widget in main_window.winfo_children():  # Emptying out frame
-        widget.place_forget()
-    main_window.pack_forget()
+if BeginBoolean == False:
+    def create_typing():
+        global current_word_label, container, typing_container, text_container, current_text, typing_box, container, timer_label, test_time, len_time, wpm_label, Textspeech, check_var, Back, Restart_button, BeginBoolean
+        # Clearing Frame
+        BeginBoolean = True
+        for widget in main_window.winfo_children():  # Emptying out frame
+            widget.place_forget()
+        main_window.pack_forget()
 
-    root.geometry("1400x700")
-    container = ctk.CTkFrame(root)
-    container.pack(expand=True, fill="both")
-    typing_container = ctk.CTkFrame(container)
-    typing_container.place(
-        relx=0.5, rely=0.5, relwidth=0.9, relheight=0.9, anchor="c"
-    )
-    main_image = PIL.Image.open("Assets\main_image.png")
-    dummy_widget1 = ctk.CTkLabel(
-        typing_container,
-        text="",
-        image=ctk.CTkImage(main_image, size=(1400, 700)),
-    )
-    dummy_widget1.pack()
-    text_container = ctk.CTkFrame(
-        typing_container, border_width=5, border_color="#767272"
-    )
-    text_container.place(
-        relx=0.5, rely=0.05, relwidth=0.9, relheight=0.45, anchor="n"
-    )
-    settings_container = ctk.CTkFrame(
-        typing_container, border_width=5, border_color="#767272", height=280
-    )
-    settings_container.place(relx=0.87, rely=0.75, anchor="c")
-    # Label for the WPM counter
-    wpm_label = ctk.CTkLabel(
-        typing_container,
-        text="WPM: ",
-        corner_radius=100,
-        fg_color="grey",
-        text_color="black",
-    )
-    wpm_label.place(in_=typing_container, relx=0.1, rely=0.07)
+        root.geometry("1400x700")
+        container = ctk.CTkFrame(root)
+        container.pack(expand=True, fill="both")
+        typing_container = ctk.CTkFrame(container)
+        typing_container.place(
+            relx=0.5, rely=0.5, relwidth=0.9, relheight=0.9, anchor="c"
+        )
+        main_image = PIL.Image.open("Assets\main_image.png")
+        dummy_widget1 = ctk.CTkLabel(
+            typing_container,
+            text="",
+            image=ctk.CTkImage(main_image, size=(1400, 700)),
+        )
+        dummy_widget1.pack()
+        text_container = ctk.CTkFrame(
+            typing_container, border_width=5, border_color="#767272"
+        )
+        text_container.place(
+            relx=0.5, rely=0.05, relwidth=0.9, relheight=0.45, anchor="n"
+        )
+        settings_container = ctk.CTkFrame(
+            typing_container, border_width=5, border_color="#767272", height=280
+        )
+        settings_container.place(relx=0.87, rely=0.75, anchor="c")
+        # Label for the WPM counter
+        wpm_label = ctk.CTkLabel(
+            typing_container,
+            text="WPM: ",
+            corner_radius=100,
+            fg_color="grey",
+            text_color="black",
+        )
+        wpm_label.place(in_=typing_container, relx=0.1, rely=0.07)
 
-    Back = ctk.CTkButton(
-        container,
-        text="← Go Back (Esc)",
-        command=go_back,
-        corner_radius=100,
-        fg_color="white",
-        text_color="black",
-    )
-    Back.place(relx=0.1)
+        Back = ctk.CTkButton(
+            container,
+            text="← Go Back (Esc)",
+            command=go_back,
+            corner_radius=100,
+            fg_color="white",
+            text_color="black",
+        )
+        Back.place(relx=0.1)
 
-    current_word_label = ctk.CTkLabel(
-        text_container,
-        text=" ".join(sampled_words[0:3]),
-        font=ctk.CTkFont(size=40),
-    )
-    current_word_label.place(relx=0.5, rely=0.5, anchor="c")
+        current_word_label = ctk.CTkLabel(
+            text_container,
+            text=" ".join(sampled_words[0:3]),
+            font=ctk.CTkFont(size=40),
+        )
+        current_word_label.place(relx=0.5, rely=0.5, anchor="c")
 
-    global timer_label
-    timer_label = ctk.CTkLabel(
-        text_container, text=f"Time left: {timer_seconds} seconds"
-    )
-    timer_label.place(relx=0.5, rely=0.7, anchor="c")
+        global timer_label
+        timer_label = ctk.CTkLabel(
+            text_container, text=f"Time left: {timer_seconds} seconds"
+        )
+        timer_label.place(relx=0.5, rely=0.7, anchor="c")
 
-    current_text = ""
-    typing_box = ctk.CTkEntry(
-        typing_container,
-        placeholder_text="   Click Box To Begin",
-        font=ctk.CTkFont(size=20),
-    )
-    typing_box.bind("<KeyRelease>", on_key_press)
-    typing_box.place(
-        relx=0.5, rely=0.91, anchor="c", relheigh=0.1, relwidth=0.3
-    )
+        current_text = ""
+        typing_box = ctk.CTkEntry(
+            typing_container,
+            placeholder_text="   Click Box To Begin",
+            font=ctk.CTkFont(size=20),
+        )
+        typing_box.bind("<KeyRelease>", on_key_press)
+        typing_box.place(
+            relx=0.5, rely=0.91, anchor="c", relheigh=0.1, relwidth=0.3
+        )
+        typing_box.focus()
 
-    # Options for Length of Time the Test is for
-    len_time = ctk.CTkOptionMenu(
-        settings_container,
-        values=["10", "30", "60"],
-        command=test_time,
-        button_color="black",
-        fg_color="grey",
-    )
-    len_time.grid(column=0, row=1, pady=6, padx=10)
-    len_time.configure(state="disable")
-    len_time_label = ctk.CTkLabel(
-        settings_container,
-        text="Seconds",
-        corner_radius=100,
-        fg_color="grey",
-        text_color="black",
-    )
-    len_time_label.grid(column=0, row=0, pady=8, padx=10)
+        # Options for Length of Time the Test is for
+        len_time = ctk.CTkOptionMenu(
+            settings_container,
+            values=["10", "30", "60"],
+            command=test_time,
+            button_color="black",
+            fg_color="grey",
+        )
+        len_time.grid(column=0, row=1, pady=6, padx=10)
+        len_time.configure(state="disable")
+        len_time_label = ctk.CTkLabel(
+            settings_container,
+            text="Seconds",
+            corner_radius=100,
+            fg_color="grey",
+            text_color="black",
+        )
+        len_time_label.grid(column=0, row=0, pady=8, padx=10)
 
-    modes = ctk.CTkOptionMenu(
-        settings_container,
-        values=["dark", "light", "system"],
-        command=ctk.set_appearance_mode,
-        button_color="black",
-        fg_color="grey",
-    )
-    modes.grid(column=0, row=3, pady=6, padx=10)
-    modes_label = ctk.CTkLabel(
-        settings_container,
-        text="Modes",
-        corner_radius=100,
-        fg_color="grey",
-        text_color="black",
-    )
-    modes_label.grid(column=0, row=2, pady=6, padx=10)
+        modes = ctk.CTkOptionMenu(
+            settings_container,
+            values=["dark", "light", "system"],
+            command=ctk.set_appearance_mode,
+            button_color="black",
+            fg_color="grey",
+        )
+        modes.grid(column=0, row=3, pady=6, padx=10)
+        modes_label = ctk.CTkLabel(
+            settings_container,
+            text="Modes",
+            corner_radius=100,
+            fg_color="grey",
+            text_color="black",
+        )
+        modes_label.grid(column=0, row=2, pady=6, padx=10)
 
-    scale = ctk.CTkOptionMenu(
-        settings_container,
-        values=["0.75", "1.0", "1.25"],
-        command=scaling,
-        button_color="black",
-        fg_color="grey",
-    )
-    scale.grid(column=0, row=5, pady=8, padx=10)
-    scale_label = ctk.CTkLabel(
-        settings_container,
-        text="UI Scale",
-        corner_radius=100,
-        fg_color="grey",
-        text_color="black",
-    )
-    scale_label.grid(column=0, row=4, pady=6, padx=10)
-    scale.set("1.0")
+        scale = ctk.CTkOptionMenu(
+            settings_container,
+            values=["0.75", "1.0", "1.25"],
+            command=scaling,
+            button_color="black",
+            fg_color="grey",
+        )
+        scale.grid(column=0, row=5, pady=8, padx=10)
+        scale_label = ctk.CTkLabel(
+            settings_container,
+            text="UI Scale",
+            corner_radius=100,
+            fg_color="grey",
+            text_color="black",
+        )
+        scale_label.grid(column=0, row=4, pady=6, padx=10)
+        scale.set("1.0")
 
-    check_var = tk.StringVar()
-    check_var.set("on")
-    Textspeech = ctk.CTkCheckBox(
-        settings_container,
-        text="Text to Speech",
-        variable=check_var,
-        onvalue="on",
-        offvalue="off",
-    )
+        check_var = tk.StringVar()
+        check_var.set("on")
+        Textspeech = ctk.CTkCheckBox(
+            settings_container,
+            text="Text to Speech",
+            variable=check_var,
+            onvalue="on",
+            offvalue="off",
+        )
+        Restart_button = ctk.CTkButton(
+                typing_container,
+                text="Restart (Enter)",
+                command=restart,
+                fg_color="grey",
+                text_color="black",
+            )
+        Restart_button.place(relx=0.5, rely=0.80, anchor="c")
+else:
+    pass
 
 
 def test_time(value):
@@ -184,6 +200,16 @@ def on_key_press(e):
         score += 1
         update_timer()
 
+# Command for the restart button that occurs when time is up
+def restart():
+    global score, timer_seconds, timer_choice, len_time
+    score = 0
+    timer_seconds = int(len_time.get())
+    timer_label.configure(text=f"Time left: {timer_seconds} seconds")
+    typing_box.configure(state="normal")
+    typing_box.delete(0, ctk.END)
+    on_key_press(e)
+
 
 # Updated word as the word is spelt right
 def update_current_word():
@@ -211,14 +237,6 @@ def update_timer():
         timer_update_id = root.after(1000, update_timer)
     else:
         timer_label.configure(text="Time's up!")
-        Restart_button = ctk.CTkButton(
-            typing_container,
-            text="Restart (Enter)",
-            command=restart,
-            fg_color="grey",
-            text_color="black",
-        )
-        Restart_button.place(relx=0.5, rely=0.80, anchor="c")
         value = int(len_time.get())
         if value == 10:
             wpm_label.configure(text=f"WPM: {score * 6} ")
@@ -296,7 +314,7 @@ def make_main_window():
 
     EndProgram = ctk.CTkButton(
         main_window,
-        text="End Program",
+        text="End Program (⇧ + Esc)",
         font=("Arial", 16),
         fg_color="#272626",
         command=root.destroy,
@@ -323,16 +341,6 @@ def keybind(e, button):
         pass
 
 
-# Command for the restart button that occurs when time is up
-def restart():
-    global score, timer_seconds, timer_choice, len_time
-    score = 0
-    timer_seconds = int(len_time.get())
-    timer_label.configure(text=f"Time left: {timer_seconds} seconds")
-    typing_box.configure(state="normal")
-    Restart_button.destroy()
-
-
 # Main variables for when program is started
 if __name__ == "__main__":
     global timer_choice
@@ -340,15 +348,14 @@ if __name__ == "__main__":
     timer_seconds = 10
     score = 0  # Keeps score on how many words are right
 
+
     root = ctk.CTk()
     root.geometry("1400x700")
     root.title("Touch Typing Helper - Gaurav Surve")
-    # root.overrideredirect(True)
-    # root.geometry("{0}x{1}+0+0".format(root.winfo_screenwidth(), root.winfo_screenheight()))
     make_main_window()
     place_main_window_content()
-    root.bind("<Shift-Return>", lambda e: keybind(e, Begin_TTH))
+    root.bind("<Shift-Return>", lambda e: keybind(e, Begin_TTH)) 
     root.bind("<Return>", lambda e: keybind(e, Restart_button))
     root.bind("<Escape>", lambda e: keybind(e, Back))
-    typing_box.invoke()
+    root.bind("<Shift-Escape>", lambda e: keybind(e, EndProgram))
     root.mainloop()
