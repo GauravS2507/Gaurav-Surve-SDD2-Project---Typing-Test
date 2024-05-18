@@ -15,9 +15,9 @@ BeginBoolean = False
 BackBoolean = False
 
 # Defining Commands - Making Main Frame, All Widgets in 2nd Window, Each widget placed here will be represened in the main window
-if BeginBoolean == False:
-    def create_typing():
-        global current_word_label, container, typing_container, text_container, current_text, typing_box, container, timer_label, test_time, len_time, wpm_label, Textspeech, check_var, Back, Restart_button, BeginBoolean
+def create_typing():
+    global current_word_label, container, typing_container, text_container, current_text, typing_box, container, timer_label, test_time, len_time, wpm_label, Textspeech, check_var, Back, Restart_button
+    if BeginBoolean == False:
         # Clearing Frame
         BeginBoolean = True
         for widget in main_window.winfo_children():  # Emptying out frame
@@ -164,8 +164,9 @@ if BeginBoolean == False:
                 text_color="black",
             )
         Restart_button.place(relx=0.5, rely=0.80, anchor="c")
-else:
-    pass
+    else:
+        pass
+
 
 
 def test_time(value):
@@ -198,8 +199,8 @@ def on_key_press(e):
         )  # More than 1 word on the screen
         typing_box.delete(0, ctk.END)
         score += 1
-        update_timer()
-
+        if timer_seconds > 0:
+            update_timer()
 # Command for the restart button that occurs when time is up
 def restart():
     global score, timer_seconds, timer_choice, len_time
@@ -208,7 +209,8 @@ def restart():
     timer_label.configure(text=f"Time left: {timer_seconds} seconds")
     typing_box.configure(state="normal")
     typing_box.delete(0, ctk.END)
-    on_key_press(e)
+    if timer_update_id:
+        root.after_cancel(timer_update_id)
 
 
 # Updated word as the word is spelt right
