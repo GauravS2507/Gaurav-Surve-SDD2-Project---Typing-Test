@@ -14,3 +14,20 @@ KEYBINDS:
 - Close Program: SHIFT + ESCAPE
 - Go Back: ESCAPE
 - Restart: ENTER
+
+BIBLIOGRAPHY/ SOURCES THAT HELPED
+- Codemy.com --> Provided assistance in using Customtkinter and especially with scaling.
+    https://www.youtube.com/c/Codemycom
+- W3 Schools (JSON FILES, but also other things)
+    https://www.w3schools.com/python/python_json.asp
+- Stack Overflow --> Helped to get general assistance for any bugs or issues I encountered. 
+    https://stackoverflow.com/
+- Github --> Repository
+    https://github.com/
+- CHATGPT was used to source words for my words.json list. This was the fastest way to source words for this project, and the only time any AI was used in the making of this task. 
+
+
+
+
+Thanks, 
+- Gaurav
