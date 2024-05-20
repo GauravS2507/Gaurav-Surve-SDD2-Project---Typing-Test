@@ -5,6 +5,7 @@ import PIL.Image
 import random
 from pathlib import Path
 import json
+from os import path
 
 
 # Initialize a variable to store the ID of the scheduled update
@@ -30,7 +31,7 @@ def create_typing():
     typing_container.place(
         relx=0.5, rely=0.5, relwidth=0.9, relheight=0.9, anchor="c"
     )
-    main_image = PIL.Image.open("Assets\main_image.png")
+    main_image = PIL.Image.open(Path(__file__).resolve().parents[0] / path.join("Assets", "main_image.png"))
     dummy_widget1 = ctk.CTkLabel(
         typing_container,
         text="",
@@ -43,7 +44,7 @@ def create_typing():
     text_container.place(
         relx=0.5, rely=0.05, relwidth=0.9, relheight=0.45, anchor="n"
     )
-    settings_container = ctk.CTkFrame(
+    settings_container = ctk.CTkFrame(    
         typing_container, border_width=5, border_color="#767272", height=280
     )
     settings_container.place(relx=0.87, rely=0.75, anchor="c")
@@ -197,7 +198,7 @@ def on_key_press(e):
 
 # Command for the restart button that occurs when time is up
 def restart():
-    global score, timer_seconds, timer_choice, len_time
+    global score, timer_seconds, timer_choice, len_time, root
     score = 0
     timer_seconds = int(len_time.get())
     timer_label.configure(text=f"Time left: {timer_seconds} seconds")
@@ -215,7 +216,7 @@ def update_current_word():
 # Receives word from JSON File "Words"
 def get_words():
     global sampled_words
-    with open("words.json") as file:
+    with open(path.join("typing_test", "words.json")) as file:
         words = json.load(file)
         sampled_words = random.sample(words, 100)
 
@@ -273,7 +274,7 @@ def credits():
 # Main Window Content - Frame Buttons labels etc
 def make_main_window():
     # Pop Up-Window - Begin Touch Type Helper
-    global main_window, Welcome_TTH, Begin_TTH, Credits, dummy_widget, EndProgram, is_on_main_window, is_on_typing_window
+    global root, main_window, Welcome_TTH, Begin_TTH, Credits, dummy_widget, EndProgram, is_on_main_window, is_on_typing_window
     is_on_main_window = True
     is_on_typing_window = False
     
@@ -287,7 +288,7 @@ def make_main_window():
         text="",
         image=ctk.CTkImage(
             PIL.Image.open(
-                Path(__file__).resolve().parents[0] / "Assets\polka.png"
+                Path(__file__).resolve().parents[0] / path.join("Assets", "polka.png")
             ),
             size=(1400, 700),
         ),
@@ -337,25 +338,32 @@ def keybind(button, action):
     elif action in actions[2:4] and is_on_typing_window:
         button.invoke()
 
+def start_app():
+    try:
+        global current_scaling, timer_seconds, score, root, timer_choice, is_on_main_window, is_on_typing_window, scale, actions
+        get_words()
+        timer_seconds = 10
+        score = 0  # Keeps score on how many words are right
+        is_on_main_window = False
+        is_on_typing_window = False
+        actions = ["to_typing_window", "do_exit", "do_restart", "to_main_window"]
+        current_scaling = "1.0"
+
+        root = ctk.CTk()
+        root.geometry("1400x700")
+        root.title("Touch Typing Helper - Gaurav Surve")
+        make_main_window()
+        place_main_window_content()
+        root.bind("<Shift-Return>", lambda e: keybind(Begin_TTH, actions[0]))
+        root.bind("<Shift-Escape>", lambda e: keybind(EndProgram, actions[1]))
+        root.bind("<Return>", lambda e: keybind(Restart_button, actions[2]))
+        root.bind("<Escape>", lambda e: keybind(Back, actions[3]))
+        root.mainloop()
+
+    except Exception as ex:
+        with open ("test.txt", "x") as f:
+            f.write(f"{type(ex).__name__} {ex}")
 
 # Main variables for when program is started
 if __name__ == "__main__":
-    global timer_choice, is_on_main_window, is_on_typing_window, scale
-    get_words()
-    timer_seconds = 10
-    score = 0  # Keeps score on how many words are right
-    is_on_main_window = False
-    is_on_typing_window = False
-    actions = ["to_typing_window", "do_exit", "do_restart", "to_main_window"]
-    current_scaling = "1.0"
-
-    root = ctk.CTk()
-    root.geometry("1400x700")
-    root.title("Touch Typing Helper - Gaurav Surve")
-    make_main_window()
-    place_main_window_content()
-    root.bind("<Shift-Return>", lambda e: keybind(Begin_TTH, actions[0]))
-    root.bind("<Shift-Escape>", lambda e: keybind(EndProgram, actions[1]))
-    root.bind("<Return>", lambda e: keybind(Restart_button, actions[2]))
-    root.bind("<Escape>", lambda e: keybind(Back, actions[3]))
-    root.mainloop()
+    start_app()
