@@ -1,1 +1,1 @@
-recursive-include typing_test *
+recursive-include typing_test_sdd *

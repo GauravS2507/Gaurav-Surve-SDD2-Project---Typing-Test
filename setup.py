@@ -4,8 +4,8 @@ with open("README.md") as f:
     LONG_DESCRIPTION = f.read()
 
 setup(
-    name="typing_test",
-    version="1.0.0",
+    name="typing_test_sdd",
+    version="1.0.1",
     author="Gaurav Surve",
     url="https://github.com/GauravS2507/Gaurav-Surve-SDD2-Project---Typing-Test",
     description="TKinter GUI Typing Test - Gaurav Surve 122SDD2",
