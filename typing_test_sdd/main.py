@@ -216,7 +216,7 @@ def update_current_word():
 # Receives word from JSON File "Words"
 def get_words():
     global sampled_words
-    with open(path.join("typing_test_sdd", "words.json")) as file:
+    with open(Path(__file__).resolve().parents[0] / "words.json") as file:
         words = json.load(file)
         sampled_words = random.sample(words, 100)
 
