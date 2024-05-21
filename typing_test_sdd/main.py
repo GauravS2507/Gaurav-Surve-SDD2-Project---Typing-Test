@@ -216,7 +216,7 @@ def update_current_word():
 # Receives word from JSON File "Words"
 def get_words():
     global sampled_words
-    with open(path.join("typing_test", "words.json")) as file:
+    with open(path.join("typing_test_sdd", "words.json")) as file:
         words = json.load(file)
         sampled_words = random.sample(words, 100)
 
@@ -340,7 +340,7 @@ def keybind(button, action):
 
 def start_app():
     try:
-        global current_scaling, timer_seconds, score, root, timer_choice, is_on_main_window, is_on_typing_window, scale, actions
+        global current_scaling, timer_seconds, score, root, timer_choice, is_on_main_window, is_on_typing_window, scale, actions 
         get_words()
         timer_seconds = 10
         score = 0  # Keeps score on how many words are right
