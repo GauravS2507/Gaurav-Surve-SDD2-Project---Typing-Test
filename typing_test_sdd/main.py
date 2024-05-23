@@ -9,47 +9,47 @@ from os import path
 
 
 # Initialize a variable to store the ID of the scheduled update
-timer_update_id = None
+timer_update_id = None #Boolean Variable to set whether the timer is meant to update or not
 
 
 # Defining Commands - Making Main Frame, All Widgets in 2nd Window, Each widget placed here will be represened in the main window
 def create_typing():
-    global current_word_label, container, typing_container, text_container, current_text, typing_box, container, timer_label, test_time, len_time, wpm_label, Textspeech, check_var, Back, Restart_button, timer_label, is_on_main_window, is_on_typing_window, scale
-    is_on_main_window = False
-    is_on_typing_window = True
+    global current_word_label, container, typing_container, text_container, current_text, typing_box, container, timer_label, test_time, len_time, wpm_label, Textspeech, check_var, Back, Restart_button, timer_label, is_on_main_window, is_on_typing_window, scale, modes
+    is_on_main_window = False #Boolean variable to show main window is not on, and now typing window keybinds wont work
+    is_on_typing_window = True #Boolean variable to show that typing window is on, and now Main window keybinds wont work
     
     # Clearing Frame
     for widget in main_window.winfo_children():  # Emptying out frame
         widget.place_forget()
     main_window.pack_forget()
 
-    root.geometry("1400x700")
+    root.geometry("1400x700") #Creating Typing window frame
     container = ctk.CTkFrame(root)
     container.pack(expand=True, fill="both")
     
-    typing_container = ctk.CTkFrame(container)
+    typing_container = ctk.CTkFrame(container) #First container that wholes everything else
     typing_container.place(
         relx=0.5, rely=0.5, relwidth=0.9, relheight=0.9, anchor="c"
     )
-    main_image = PIL.Image.open(Path(__file__).resolve().parents[0] / path.join("Assets", "main_image.png"))
+    main_image = PIL.Image.open(Path(__file__).resolve().parents[0] / path.join("Assets", "main_image.png")) #Image holder
     dummy_widget1 = ctk.CTkLabel(
         typing_container,
         text="",
         image=ctk.CTkImage(main_image, size=(1400, 700)),
     )
-    dummy_widget1.pack()
+    dummy_widget1.pack() #Frame that holds the words to type, and time left
     text_container = ctk.CTkFrame(
         typing_container, border_width=5, border_color="#767272"
     )
     text_container.place(
         relx=0.5, rely=0.05, relwidth=0.9, relheight=0.45, anchor="n"
     )
-    settings_container = ctk.CTkFrame(    
+    settings_container = ctk.CTkFrame(    #Container that holds settings functions + accesibility features
         typing_container, border_width=5, border_color="#767272", height=280
     )
     settings_container.place(relx=0.87, rely=0.75, anchor="c")
     # Label for the WPM counter
-    wpm_label = ctk.CTkLabel(
+    wpm_label = ctk.CTkLabel( #Label that displays the WPM of the user
         typing_container,
         text="WPM: ",
         corner_radius=100,
@@ -58,7 +58,7 @@ def create_typing():
     )
     wpm_label.place(in_=typing_container, relx=0.1, rely=0.07)
 
-    Back = ctk.CTkButton(
+    Back = ctk.CTkButton( #Button to go back to Main window from the typing window
         container,
         text="← Go Back (Esc)",
         command=go_back,
@@ -68,20 +68,20 @@ def create_typing():
     )
     Back.place(relx=0.1)
 
-    current_word_label = ctk.CTkLabel(
+    current_word_label = ctk.CTkLabel( #Current word that the user has to type
         text_container,
         text=" ".join(sampled_words[0:3]),
         font=ctk.CTkFont(size=40),
     )
     current_word_label.place(relx=0.5, rely=0.5, anchor="c")
 
-    timer_label = ctk.CTkLabel(
+    timer_label = ctk.CTkLabel( #Timer label
         text_container, text=f"Time left: {timer_seconds} seconds"
     )
     timer_label.place(relx=0.5, rely=0.7, anchor="c")
 
-    current_text = ""
-    typing_box = ctk.CTkEntry(
+    current_text = "" #This variable stores what the user has typed into the entrybox and then later on checks whether the word is spelt correctly
+    typing_box = ctk.CTkEntry( #entrybox for the user to type in
         typing_container,
         placeholder_text="   Click Box To Begin",
         font=ctk.CTkFont(size=20),
@@ -90,10 +90,10 @@ def create_typing():
     typing_box.place(
         relx=0.5, rely=0.91, anchor="c", relheigh=0.1, relwidth=0.3
     )
-    typing_box.focus()
+    typing_box.focus() #Focus ensures that the entrybox is already highlighted, and that the user does not need to click it
 
     # Options for Length of Time the Test is for
-    len_time = ctk.CTkOptionMenu(
+    len_time = ctk.CTkOptionMenu( 
         settings_container,
         values=["10", "30", "60"],
         command=test_time,
@@ -111,10 +111,10 @@ def create_typing():
     )
     len_time_label.grid(column=0, row=0, pady=8, padx=10)
 
-    modes = ctk.CTkOptionMenu(
+    modes = ctk.CTkOptionMenu( #Options for mode the user wants, system, dark or light
         settings_container,
         values=["dark", "light", "system"],
-        command=ctk.set_appearance_mode,
+        command= ctk.set_appearance_mode,
         button_color="black",
         fg_color="grey",
     )
@@ -130,7 +130,7 @@ def create_typing():
     modes.set("system")
     modes.set(ctk.get_appearance_mode())
 
-    scale = ctk.CTkOptionMenu(
+    scale = ctk.CTkOptionMenu( #Options for the scale the user wants to use
         settings_container,
         values=["0.75", "1.0", "1.25"],
         command=scaling,
@@ -147,10 +147,8 @@ def create_typing():
     )
     scale_label.grid(column=0, row=4, pady=6, padx=10)
     scale.set(current_scaling)
-    
-
   
-    Restart_button = ctk.CTkButton(
+    Restart_button = ctk.CTkButton( #To restart the test
         typing_container,
         text="Restart (Enter)",
         command=restart,
@@ -160,13 +158,13 @@ def create_typing():
     Restart_button.place(relx=0.5, rely=0.80, anchor="c")
 
 
-def test_time(value):
+def test_time(value): #Function that updates the time left in the timer label
     global timer_seconds
     timer_label.configure(text=f"Time left: {str(value)} seconds")
     timer_seconds = int(value)
 
 
-def scaling(value):
+def scaling(value): #Function that sets the scale to what the user selects, Customtkinter function
     global current_scaling
     current_scaling = value
     ctk.set_widget_scaling(float(value))
@@ -176,7 +174,7 @@ def scaling(value):
 def go_back():
     container.pack_forget()  # Forget the current window
     root.geometry("1400x700")  # Adjust window size
-    make_main_window()  # Have to remake content who knows why!!!
+    make_main_window()  
     place_main_window_content()
 
 
@@ -236,7 +234,7 @@ def update_timer():
         timer_label.configure(text="Time's up!")
         value = int(len_time.get())
         if value == 10:
-            wpm_label.configure(text=f"WPM: {score * 6} ")
+            wpm_label.configure(text=f"WPM: {score * 6} ") #formula depending on the length of the test the user wants to run. 
 
         elif value == 30:
             wpm_label.configure(text=f"WPM: {score * 2} ")
