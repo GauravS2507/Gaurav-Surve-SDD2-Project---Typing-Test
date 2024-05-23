@@ -172,6 +172,17 @@ def scaling(value): #Function that sets the scale to what the user selects, Cust
 
 # Function that commands the Go Back Button
 def go_back():
+    global is_on_main_window, is_on_typing_window, timer_update_id, timer_seconds
+
+    # If leaving the typing window, stop the timer
+    if is_on_typing_window:
+        if timer_update_id:
+            root.after_cancel(timer_update_id)
+            timer_seconds = int(len_time.get())
+    
+    # Set window flags accordingly
+    is_on_main_window = True
+    is_on_typing_window = False
     container.pack_forget()  # Forget the current window
     root.geometry("1400x700")  # Adjust window size
     make_main_window()  
