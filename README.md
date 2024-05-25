@@ -26,7 +26,7 @@ BIBLIOGRAPHY/ SOURCES THAT HELPED
     https://github.com/
 - CHATGPT was used to source words for my words.json list. This was the fastest way to source words for this project, and the only time any AI was used in the making of this task.
 
-SEE WIKI FOR ADDITIONAL INFORMATION/ASSISTANCE: https://github.com/GauravS2507/typing_test_sdd.wiki.git
+SEE WIKI FOR ADDITIONAL INFORMATION/ASSISTANCE: [https://github.com/GauravS2507/typing_test_sdd.wiki.git](https://github.com/GauravS2507/typing_test_sdd/wiki)
 
 
 
