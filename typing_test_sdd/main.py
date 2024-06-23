@@ -14,9 +14,10 @@ timer_update_id = None #Boolean Variable to set whether the timer is meant to up
 
 # Defining Commands - Making Main Frame, All Widgets in 2nd Window, Each widget placed here will be represened in the main window
 def create_typing():
-    global current_word_label, container, typing_container, text_container, current_text, typing_box, container, timer_label, test_time, len_time, wpm_label, Textspeech, check_var, Back, Restart_button, timer_label, is_on_main_window, is_on_typing_window, scale, modes
+    global current_word_label, container, typing_container, text_container, current_text, typing_box, container, timer_label, test_time, len_time, wpm_label, Textspeech, check_var, Back, Restart_button, timer_label, is_on_main_window, is_on_typing_window, scale, modes, is_on_settings_window
     is_on_main_window = False #Boolean variable to show main window is not on, and now typing window keybinds wont work
-    is_on_typing_window = True #Boolean variable to show that typing window is on, and now Main window keybinds wont work
+    is_on_typing_window = True #Boolean variable to show that typing window is on, and now Main window keybinds wont work\
+    is_on_settings_window = False
     
     # Clearing Frame
     for widget in main_window.winfo_children():  # Emptying out frame
@@ -27,7 +28,7 @@ def create_typing():
     container = ctk.CTkFrame(root)
     container.pack(expand=True, fill="both")
     
-    typing_container = ctk.CTkFrame(container) #First container that wholes everything else
+    typing_container = ctk.CTkFrame(container) #First container that holds everything else
     typing_container.place(
         relx=0.5, rely=0.5, relwidth=0.9, relheight=0.9, anchor="c"
     )
@@ -44,10 +45,7 @@ def create_typing():
     text_container.place(
         relx=0.5, rely=0.05, relwidth=0.9, relheight=0.45, anchor="n"
     )
-    settings_container = ctk.CTkFrame(    #Container that holds settings functions + accesibility features
-        typing_container, border_width=5, border_color="#767272", height=280
-    )
-    settings_container.place(relx=0.87, rely=0.75, anchor="c")
+    
     # Label for the WPM counter
     wpm_label = ctk.CTkLabel( #Label that displays the WPM of the user
         typing_container,
@@ -83,70 +81,16 @@ def create_typing():
     current_text = "" #This variable stores what the user has typed into the entrybox and then later on checks whether the word is spelt correctly
     typing_box = ctk.CTkEntry( #entrybox for the user to type in
         typing_container,
-        placeholder_text="   Click Box To Begin",
-        font=ctk.CTkFont(size=20),
+        placeholder_text="       Click Box To Begin",
+        font=ctk.CTkFont(size=20)
     )
     typing_box.bind("<KeyRelease>", on_key_press)
     typing_box.place(
-        relx=0.5, rely=0.91, anchor="c", relheigh=0.1, relwidth=0.3
+        relx=0.5, rely=0.6, anchor="c", relheigh=0.1, relwidth=0.3
     )
-    typing_box.focus() #Focus ensures that the entrybox is already highlighted, and that the user does not need to click it
+    #typing_box.focus() #Focus ensures that the entrybox is already highlighted, and that the user does not need to click it
 
-    # Options for Length of Time the Test is for
-    len_time = ctk.CTkOptionMenu( 
-        settings_container,
-        values=["10", "30", "60"],
-        command=test_time,
-        button_color="black",
-        fg_color="grey",
-    )
-    len_time.grid(column=0, row=1, pady=6, padx=10)#places time button
-    len_time.configure(state="disable")
-    len_time_label = ctk.CTkLabel(
-        settings_container,
-        text="Seconds",
-        corner_radius=100,
-        fg_color="grey",
-        text_color="black",
-    )
-    len_time_label.grid(column=0, row=0, pady=8, padx=10)#places time button
-
-    modes = ctk.CTkOptionMenu( #Options for mode the user wants, system, dark or light
-        settings_container,
-        values=["dark", "light", "system"],
-        command= ctk.set_appearance_mode,
-        button_color="black",
-        fg_color="grey",
-    )
-    modes.grid(column=0, row=3, pady=6, padx=10) #places modes button
-    modes_label = ctk.CTkLabel(
-        settings_container,
-        text="Modes",
-        corner_radius=100,
-        fg_color="grey",
-        text_color="black",
-    )
-    modes_label.grid(column=0, row=2, pady=6, padx=10) #places modes button
-    modes.set("system")
-    modes.set(ctk.get_appearance_mode())
-
-    scale = ctk.CTkOptionMenu( #Options for the scale the user wants to use
-        settings_container,
-        values=["0.75", "1.0", "1.25"],
-        command=scaling,
-        button_color="black",
-        fg_color="grey",
-    )
-    scale.grid(column=0, row=5, pady=8, padx=10)#places scale button
-    scale_label = ctk.CTkLabel(
-        settings_container,
-        text="UI Scale",
-        corner_radius=100,
-        fg_color="grey",
-        text_color="black",
-    )
-    scale_label.grid(column=0, row=4, pady=6, padx=10)#places scale button
-    scale.set(current_scaling)
+    
   
     Restart_button = ctk.CTkButton( #To restart the test
         typing_container,
@@ -154,13 +98,14 @@ def create_typing():
         command=restart,
         fg_color="grey",
         text_color="black",
+        hover_color= "red"
     )
-    Restart_button.place(relx=0.5, rely=0.80, anchor="c")
+    Restart_button.place(relx=0.5, rely=0.91, anchor="c")
 
 
 def test_time(value): #Function that updates the time left in the timer label
     global timer_seconds
-    timer_label.configure(text=f"Time left: {str(value)} seconds")
+    timer_label.configure(text=f"Time left: {str(value)} seconds" )
     timer_seconds = int(value)
 
 
@@ -172,7 +117,7 @@ def scaling(value): #Function that sets the scale to what the user selects, Cust
 
 # Function that commands the Go Back Button
 def go_back():
-    global is_on_main_window, is_on_typing_window, timer_update_id, timer_seconds
+    global is_on_main_window, is_on_typing_window, timer_update_id, timer_seconds, is_on_settings_window
 
     # If leaving the typing window, stop the timer
     if is_on_typing_window:
@@ -183,6 +128,7 @@ def go_back():
     # Set window flags accordingly
     is_on_main_window = True
     is_on_typing_window = False
+    is_on_settings_window = False
     container.pack_forget()  # Forget the current window
     root.geometry("1400x700")  # Adjust window size
     make_main_window()  
@@ -253,22 +199,121 @@ def update_timer():
             wpm_label.configure(text=f"WPM: {score} ")
         typing_box.configure(state="disable")
 
-
+def settings_back():
+    container.pack_forget()  # Forget the current window
+    root.geometry("1400x700")  # Adjust window size
+    make_main_window()  
+    place_main_window_content()
 # Starts timer
 def start_timer(duration):
     global timer_seconds
     timer_seconds = duration
     update_timer()
 
+def opensettings():
+    global dummy_widget3, opennsettings_frame, container, is_on_settings_window, is_on_typing_window, is_on_main_window, settings_backbutton, Back, len_time, timer_label
+    for widget in main_window.winfo_children():  # Emptying out frame
+        widget.place_forget()
+    main_window.pack_forget()
 
+    is_on_settings_window =True
+    is_on_main_window = False
+    is_on_typing_window = False
+
+    root.geometry("1400x700") #Creating Typing window frame
+    container = ctk.CTkFrame(root)
+    container.pack(expand=True, fill="both")
+
+    opennsettings_frame = ctk.CTkFrame(root, border_width=5, border_color="#767272", height=280, fg_color= "#767272")
+    opennsettings_frame.place(relx=0.5, rely=0.5, relwidth=0.9, relheight=0.9, anchor="c")
+    settings_image = PIL.Image.open(Path(__file__).resolve().parents[0] / path.join("Assets", "settingsbg.png")) #Image holder
+    dummy_widget3 = ctk.CTkLabel(
+        opennsettings_frame,
+        text="",
+        image=ctk.CTkImage(settings_image, size=(1400, 700)))
+    dummy_widget3.pack()
+    Back = ctk.CTkButton( #Button to go back to Main window from the typing window
+        container,
+        text="← Go Back (Esc)",
+        command=settings_back,
+        corner_radius=100,
+        fg_color="white",
+        text_color="black",
+    )
+    Back.place(relx=0.1) #places back button
+    len_time = ctk.CTkOptionMenu( 
+        opennsettings_frame,
+        values=["10", "30", "60"],
+        command=test_time,
+        button_color="gray",
+        fg_color="black",
+    )
+    len_time.configure(state="disable")
+    len_time_label = ctk.CTkLabel(
+        opennsettings_frame,
+        text="Seconds",
+        fg_color="#272626",
+        text_color="white",
+        font=("helvetica", 20) 
+    )
+    len_time.place(relx = 0.45, rely=0.4)
+    len_time_label.place(relx = 0.475, rely = 0.3)
+    modes = ctk.CTkOptionMenu( #Options for mode the user wants, system, dark or light
+        opennsettings_frame,
+        values=["dark", "light", "system"],
+        command= ctk.set_appearance_mode,
+        button_color="gray",
+        fg_color="black",
+    )
+    modes_label = ctk.CTkLabel(
+        opennsettings_frame,
+        text="Themes",
+        fg_color="#272626",
+        text_color="white",
+        font=("helvetica", 20) 
+    )
+    modes.set("system")
+    modes.set(ctk.get_appearance_mode())
+    modes_label.place(relx = 0.475, rely = 0.5)
+    modes.place(relx = 0.45, rely = 0.6)
+    scale = ctk.CTkOptionMenu( #Options for the scale the user wants to use
+        opennsettings_frame,
+        values=["0.75", "1.0", "1.25"],
+        command=scaling,
+        button_color="gray",
+        fg_color="black",
+    )
+    scale_label = ctk.CTkLabel(
+        opennsettings_frame,
+        text="UI Scale",
+        fg_color="#272626",
+        text_color="white",
+        font=("helvetica", 20) 
+    )
+    scale.set(current_scaling)
+    scale_label.place(relx = 0.475, rely = 0.7)
+    scale.place(relx = 0.45, rely =0.8)
+
+
+
+
+
+    
+
+   
+    
+    
 # Command that remakes the main window content after the Back Button is pressed
 def place_main_window_content():
     main_window.pack(expand=True, fill="both")
     dummy_widget.pack()
-    Welcome_TTH.place(relx=0.5, rely=0.2, anchor="c")
     Begin_TTH.place(relx=0.5, rely=0.4, anchor="c")
-    EndProgram.place(relx=0.5, rely=0.6, anchor="c")
-    Credits.place(relx=0.5, rely=0.5, anchor="c")
+    EndProgram.place(relx=0.5, rely=0.7, anchor="c")
+    Credits.place(relx=0.5, rely=0.6, anchor="c")
+    Settings.place(relx=0.5, rely=0.5, anchor="c")
+
+    
+    
 
 
 # Credits Function
@@ -276,12 +321,14 @@ def credits():
     tk.messagebox.showinfo("Credits", "Made by Gaurav 12SDD2")
 
 
+
 # Main Window Content - Frame Buttons labels etc
 def make_main_window():
     # Pop Up-Window - Begin Touch Type Helper
-    global root, main_window, Welcome_TTH, Begin_TTH, Credits, dummy_widget, EndProgram, is_on_main_window, is_on_typing_window
+    global root, main_window, Welcome_TTH, Begin_TTH, Credits, dummy_widget, EndProgram, is_on_main_window, is_on_typing_window, Settings, is_on_settings_window
     is_on_main_window = True
     is_on_typing_window = False
+    is_on_settings_window = False
     
     # main_window
     main_window = ctk.CTkFrame(
@@ -293,21 +340,14 @@ def make_main_window():
         text="",
         image=ctk.CTkImage(
             PIL.Image.open(
-                Path(__file__).resolve().parents[0] / path.join("Assets", "polka.png")
+                Path(__file__).resolve().parents[0] / path.join("Assets", "logo.png")
             ),
             size=(1400, 700),
         ),
     )
 
-    # Labels Used in main window
-    Welcome_TTH = ctk.CTkLabel(
-        main_window,
-        text="Welcome to the Touch Type Helper",
-        font=("Work Sans", 24),
-        fg_color="#272626",
-        text_color= "white",
-        corner_radius=1,
-    )
+    
+    
 
     # Buttons in main window
     Begin_TTH = ctk.CTkButton( #Begin button
@@ -333,6 +373,10 @@ def make_main_window():
         fg_color="#272626",
         command=credits,
     )
+    
+    Settings = ctk.CTkButton(main_window, text= "Settings", font=("Arial", 16), fg_color="#272626", command= opensettings)
+    
+
 
 
 
@@ -342,15 +386,18 @@ def keybind(button, action): #Function to make sure that keybinds only work when
         button.invoke()
     elif action in actions[2:4] and is_on_typing_window: #If users is on the typing window only the back and restart button work
         button.invoke()
+    elif action in actions[3:4] and is_on_settings_window: #If user is on the settings window only back button works
+        button.invoke()
 
 def start_app(): #Function to begin app when it is called through the temrinal
     try:
-        global current_scaling, timer_seconds, score, root, timer_choice, is_on_main_window, is_on_typing_window, scale, actions 
+        global current_scaling, timer_seconds, score, root, timer_choice, is_on_main_window, is_on_typing_window, scale, actions, is_on_settings_window
         get_words()
         timer_seconds = 10
         score = 0  # Keeps score on how many words are right
         is_on_main_window = False #Sets variabel to false when program is intially run
         is_on_typing_window = False#Sets variabel to false when program is intially run
+        is_on_settings_window = False#Sets variable to false when program is initially run
         actions = ["to_typing_window", "do_exit", "do_restart", "to_main_window"]
         current_scaling = "1.0"
 #Basic UI 
@@ -364,6 +411,8 @@ def start_app(): #Function to begin app when it is called through the temrinal
         root.bind("<Shift-Escape>", lambda e: keybind(EndProgram, actions[1]))
         root.bind("<Return>", lambda e: keybind(Restart_button, actions[2]))
         root.bind("<Escape>", lambda e: keybind(Back, actions[3]))
+        root.bind("")
+        
         root.mainloop()
 
     except Exception as ex:
