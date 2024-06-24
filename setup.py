@@ -5,7 +5,7 @@ with open("README.md") as f:
 
 setup(
     name="typing_test_sdd",
-    version="1.0.6",
+    version="1.0.7",
     author="Gaurav Surve",
     url="https://github.com/GauravS2507/Gaurav-Surve-SDD2-Project---Typing-Test",
     description="TKinter GUI Typing Test - Gaurav Surve 122SDD2",

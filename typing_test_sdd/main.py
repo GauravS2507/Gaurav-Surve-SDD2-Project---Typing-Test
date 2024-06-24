@@ -374,7 +374,7 @@ def make_main_window():
         command=credits,
     )
     
-    Settings = ctk.CTkButton(main_window, text= "Settings", font=("Arial", 16), fg_color="#272626", command= opensettings)
+    Settings = ctk.CTkButton(main_window, text= "Settings (⇧ + S)", font=("Arial", 16), fg_color="#272626", command= opensettings)
     
 
 
@@ -382,6 +382,8 @@ def make_main_window():
 
 def keybind(button, action): #Function to make sure that keybinds only work when the correct window is opened. 
     global is_on_main_window, is_on_typing_window
+    if action == actions[4] and is_on_main_window:
+        button.invoke()
     if action in actions[0:2] and is_on_main_window: #if the user is on the main window only the begin and end program keybinds work
         button.invoke()
     elif action in actions[2:4] and is_on_typing_window: #If users is on the typing window only the back and restart button work
@@ -398,7 +400,7 @@ def start_app(): #Function to begin app when it is called through the temrinal
         is_on_main_window = False #Sets variabel to false when program is intially run
         is_on_typing_window = False#Sets variabel to false when program is intially run
         is_on_settings_window = False#Sets variable to false when program is initially run
-        actions = ["to_typing_window", "do_exit", "do_restart", "to_main_window"]
+        actions = ["to_typing_window", "do_exit", "do_restart", "to_main_window", "to_settings"]
         current_scaling = "1.0"
 #Basic UI 
         root = ctk.CTk()
@@ -411,7 +413,7 @@ def start_app(): #Function to begin app when it is called through the temrinal
         root.bind("<Shift-Escape>", lambda e: keybind(EndProgram, actions[1]))
         root.bind("<Return>", lambda e: keybind(Restart_button, actions[2]))
         root.bind("<Escape>", lambda e: keybind(Back, actions[3]))
-        root.bind("")
+        root.bind("<Shift-s>", lambda e: keybind(Settings, actions[4]))
         
         root.mainloop()
 
