@@ -5,7 +5,7 @@ with open("README.md") as f:
 
 setup(
     name="typing_test_sdd",
-    version="1.0.7",
+    version="1.0.8",
     author="Gaurav Surve",
     url="https://github.com/GauravS2507/Gaurav-Surve-SDD2-Project---Typing-Test",
     description="TKinter GUI Typing Test - Gaurav Surve 122SDD2",
@@ -18,11 +18,7 @@ setup(
         "customtkinter",
         "pillow",
     ],
-    entry_points={
-        "gui_scripts": [
-            "typing-ctk = typing_test_sdd:start_app"
-        ]
-    },
+    entry_points={"gui_scripts": ["typing-ctk = typing_test_sdd:start_app"]},
     classifiers=[
         "Development Status :: 5 - Production/Stable",
         "Intended Audience :: End Users/Desktop",
@@ -31,6 +27,6 @@ setup(
         "Programming Language :: Python",
         "Programming Language :: Python :: 3",
         "Topic :: Education",
-        "Topic :: Games/Entertainment"
-    ]
+        "Topic :: Games/Entertainment",
+    ],
 )
