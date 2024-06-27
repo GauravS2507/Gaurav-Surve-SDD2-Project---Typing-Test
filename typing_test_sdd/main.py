@@ -117,7 +117,7 @@ def create_typing():
 
 
 def test_time(value):  # Function that updates the time left in the timer label
-    global timer_seconds
+    global timer_seconds, timer_label
     timer_label.configure(text=f"Time left: {str(value)} seconds")
     timer_seconds = int(value)
 
@@ -132,16 +132,16 @@ def scaling(
 
 # Function that commands the Go Back Button
 def go_back():
-    global is_on_main_window, is_on_typing_window, timer_update_id, timer_seconds, is_on_settings_window
+    global is_on_main_window, is_on_typing_window, timer_update_id, timer_seconds, is_on_settings_window, len_time
 
-    # If leaving the typing window, stop the timer
+    # If leaving the typing window, stop the timer and cancels any updates
     if is_on_typing_window:
         if timer_update_id:
             root.after_cancel(timer_update_id)
             timer_seconds = int(len_time.get())
 
     # Set window flags accordingly
-    is_on_main_window = True
+    is_on_main_window = True #Assigning Boolean variable so only main window keybinds work
     is_on_typing_window = False
     is_on_settings_window = False
     container.pack_forget()  # Forget the current window
@@ -168,7 +168,7 @@ def on_key_press(e):
 
 # Command for the restart button that occurs when time is up
 def restart():
-    global score, timer_seconds, timer_choice, len_time, root
+    global score, timer_seconds, timer_choice, len_time, root, timer_label
     score = 0
     timer_seconds = int(len_time.get())
     timer_label.configure(text=f"Time left: {timer_seconds} seconds")
@@ -193,7 +193,7 @@ def get_words():
 
 # Countdown Timer
 def update_timer():
-    global timer_seconds, timer_update_id, score, Restart_button
+    global timer_seconds, timer_update_id, score, Restart_button, len_time, timer_label
     if timer_seconds > 0:
         timer_seconds -= 1
         timer_label.configure(text=f"Time left: {timer_seconds} seconds")
@@ -217,7 +217,7 @@ def update_timer():
         typing_box.configure(state="disable")
 
 
-def settings_back():
+def settings_back(): #Command to go back from Settings Window
     container.pack_forget()  # Forget the current window
     root.geometry("1400x700")  # Adjust window size
     make_main_window()
@@ -231,7 +231,7 @@ def start_timer(duration):
     update_timer()
 
 
-def opensettings():
+def opensettings(): #Creating the settings window, and creating and adding widgets
     global dummy_widget3, opennsettings_frame, container, is_on_settings_window, is_on_typing_window, is_on_main_window, settings_backbutton, Back, len_time, timer_label
     for widget in main_window.winfo_children():  # Emptying out frame
         widget.place_forget()
@@ -340,21 +340,21 @@ def place_main_window_content():
 
 # Credits Function
 def credits():
-    tk.messagebox.showinfo("Credits", "Made by Gaurav 12SDD2")
+    tk.messagebox.showinfo("Credits", "Made by Gaurav 12SDD2") 
 
 
 # Main Window Content - Frame Buttons labels etc
 def make_main_window():
     # Pop Up-Window - Begin Touch Type Helper
-    global root, main_window, Welcome_TTH, Begin_TTH, Credits, dummy_widget, EndProgram, is_on_main_window, is_on_typing_window, Settings, is_on_settings_window
-    is_on_main_window = True
+    global root, main_window, Welcome_TTH, Begin_TTH, Credits, dummy_widget, EndProgram, is_on_main_window, is_on_typing_window, Settings, is_on_settings_window, len_time
+    is_on_main_window = True #Assigning Boolean variable so only main window keybinds will work
     is_on_typing_window = False
     is_on_settings_window = False
 
     # main_window
     main_window = ctk.CTkFrame(
         root, width=400, height=500, border_width=10
-    )  # border_color = "#13141F") )
+    )  
 
     dummy_widget = ctk.CTkLabel(  # holds main window's image
         main_window,
@@ -393,7 +393,7 @@ def make_main_window():
         command=credits,
     )
 
-    Settings = ctk.CTkButton(
+    Settings = ctk.CTkButton( #Settings Button in main window
         main_window,
         text="Settings (⇧ + S)",
         font=("Arial", 16),
@@ -402,7 +402,7 @@ def make_main_window():
     )
 
 
-def keybind(
+def keybind( #Keybinds command to ensure keybinds work in certain windows
     button, action
 ):  # Function to make sure that keybinds only work when the correct window is opened.
     global is_on_main_window, is_on_typing_window
@@ -424,7 +424,7 @@ def keybind(
 
 def start_app():  # Function to begin app when it is called through the temrinal
     try:
-        global current_scaling, timer_seconds, score, root, timer_choice, is_on_main_window, is_on_typing_window, scale, actions, is_on_settings_window
+        global current_scaling, timer_seconds, score, root, timer_choice, is_on_main_window, is_on_typing_window, scale, actions, is_on_settings_window, len_time
         get_words()
         timer_seconds = 10
         score = 0  # Keeps score on how many words are right
@@ -452,12 +452,13 @@ def start_app():  # Function to begin app when it is called through the temrinal
         make_main_window()
         place_main_window_content()
         # Assigning values to keybinds to make sure that they only work when called
-        root.bind("<Shift-Return>", lambda e: keybind(Begin_TTH, actions[0]))
-        root.bind("<Shift-Escape>", lambda e: keybind(EndProgram, actions[1]))
-        root.bind("<Return>", lambda e: keybind(Restart_button, actions[2]))
-        root.bind("<Escape>", lambda e: keybind(Back, actions[3]))
-        root.bind("<Shift-S>", lambda e: keybind(Settings, actions[4]))
-
+        root.bind("<Shift-Return>", lambda e: keybind(Begin_TTH, actions[0]))#Assigning Shift-Return to Begin_TTH command
+        root.bind("<Shift-Escape>", lambda e: keybind(EndProgram, actions[1]))#Assigning Shift-Escape to EndProgram command
+        root.bind("<Return>", lambda e: keybind(Restart_button, actions[2]))#Assigning Return to Restart_button command
+        root.bind("<Escape>", lambda e: keybind(Back, actions[3]))#Assigning Escape to Back command
+        root.bind("<Shift-S>", lambda e: keybind(Settings, actions[4])) #Assigning Shift-S to Setings command
+        opensettings()
+        go_back()
         root.mainloop()
 
     except Exception as ex:
