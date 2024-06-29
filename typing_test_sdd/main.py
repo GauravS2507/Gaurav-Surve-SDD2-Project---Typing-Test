@@ -158,7 +158,7 @@ def on_key_press(e):
         sampled_words.pop(0)
         update_current_word()
         typing_box.configure(
-            placeholder_text=" ".join(sampled_words[0:3])
+            placeholder_text=" ".join(sampled_words[0:2])
         )  # More than 1 word on the screen
         typing_box.delete(0, ctk.END)
         score += 1
@@ -326,6 +326,7 @@ def opensettings(): #Creating the settings window, and creating and adding widge
     scale.set(current_scaling)
     scale_label.place(relx=0.475, rely=0.7)
     scale.place(relx=0.45, rely=0.8)
+    
 
 
 # Command that remakes the main window content after the Back Button is pressed
@@ -457,6 +458,8 @@ def start_app():  # Function to begin app when it is called through the temrinal
         root.bind("<Return>", lambda e: keybind(Restart_button, actions[2]))#Assigning Return to Restart_button command
         root.bind("<Escape>", lambda e: keybind(Back, actions[3]))#Assigning Escape to Back command
         root.bind("<Shift-S>", lambda e: keybind(Settings, actions[4])) #Assigning Shift-S to Setings command
+        create_typing()
+        go_back()
         opensettings()
         go_back()
         root.mainloop()
