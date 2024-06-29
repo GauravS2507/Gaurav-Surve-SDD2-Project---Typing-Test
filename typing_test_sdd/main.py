@@ -158,7 +158,7 @@ def on_key_press(e):
         sampled_words.pop(0)
         update_current_word()
         typing_box.configure(
-            placeholder_text=" ".join(sampled_words[0:2])
+            placeholder_text=" ".join(sampled_words[0:3])
         )  # More than 1 word on the screen
         typing_box.delete(0, ctk.END)
         score += 1
